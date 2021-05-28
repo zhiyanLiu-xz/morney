@@ -5,8 +5,14 @@
 </template>
 
 <script lang="ts">
-
   export default {
     name: 'Money',
   };
 </script>
+
+<style lang="scss">
+  @import "~@/assets/style/helper.scss";
+  p{
+    color: $red;
+  }
+</style>
