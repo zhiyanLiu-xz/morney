@@ -51,7 +51,5 @@
 
 <style lang="scss">
   @import "~@/assets/style/helper.scss";
-  p{
-    color: $red;
-  }
+
 </style>
