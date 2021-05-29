@@ -1,30 +1,21 @@
 <template>
-  <div>
+  <div id="app">
     <router-view/>
   </div>
 </template>
 
 <style lang="scss">
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box
-  }
+ @import "~@/assets/style/reset.scss";
+ @import "~@/assets/style/helper.scss";
  body{
    line-height: 1.5;
- }
- a{
-   text-decoration: none;
-   color: inherit;
+   font-family: $font-hei;
  }
   #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-align: center;
-    color: #2c3e50;
+    color: #333;
   }
-
   #nav {
     padding: 30px;
 
