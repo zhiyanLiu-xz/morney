@@ -13,7 +13,7 @@
       <button @click="inputContent">7</button>
       <button @click="inputContent">8</button>
       <button @click="inputContent">9</button>
-      <button class="ok">OK</button>
+      <button @click="ok" class="ok">OK</button>
       <button @click="inputContent" class="zero">0</button>
       <button @click="inputContent">.</button>
     </div>
@@ -30,7 +30,6 @@
     inputContent(event: MouseEvent) {
       const button = (event.target as HTMLButtonElement);
       const input = button.textContent!;
-      console.log(input)
       if (this.output.length === 16) {return;}
       if (this.output === '0') {
         if ('0123456789'.indexOf(input) >= 0) {
@@ -45,7 +44,7 @@
     }
 
     remove() {
-      if (this.output.length === '1') {
+      if (this.output.length === 1) {
         this.output = '0';
       } else {
         this.output = this.output.slice(0, -1);
@@ -54,6 +53,9 @@
 
     clear() {
       this.output = '0';
+    }
+    ok(){
+      this.$emit('update:value',this.output)
     }
   }
 </script>
