@@ -4,7 +4,6 @@
     <Types :value.sync="record.type"/>
     <Notes @update:value="onUpdateNotes"/>
     <Tags :data-source.sync="tags" @update:value="onUpdateTags"/>
-    {{recordList}}
   </Layout>
 </template>
 
@@ -16,6 +15,7 @@
   import Tags from '@/components/Money/Tags.vue';
   import {Component, Watch} from 'vue-property-decorator';
   import model from '@/model.ts';
+  import RecordItem from '@/custom'
 
   const recordList = model.fetch()
 
