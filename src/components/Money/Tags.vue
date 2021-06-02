@@ -45,6 +45,7 @@
 <style lang="scss" scoped>
   .tags {
     flex-grow: 1;
+    background: white;
     display: flex;
     flex-direction: column-reverse;
 
