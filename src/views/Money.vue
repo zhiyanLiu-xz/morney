@@ -1,6 +1,5 @@
 <template>
   <Layout class-prefix="layout">
-    {{record}}
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord"/>
     <Types :value.sync="record.type"/>
     <div class="notes">
@@ -62,7 +61,6 @@
 
 <style>
   .layout-content {
-    border: 3px solid red;
     display: flex;
     flex-direction: column-reverse;
   }
