@@ -15,20 +15,21 @@
   import Types from '@/components/Money/Types.vue';
   import Tags from '@/components/Money/Tags.vue';
   import {Component, Watch} from 'vue-property-decorator';
-  import RecordItem from '@/custom';
+  // import RecordItem from '@/custom';
   import recordListModel from '@/models/recordListModel';
   import tagListModel from '@/models/tagListModel';
   import FormItem from '@/components/Money/FormItem.vue';
 
   const recordList = recordListModel.fetch();
-  const tagList = tagListModel.fetch();
 
   @Component({
     components: {FormItem, Tags, Types, NumberPad},
   })
   export default class Money extends Vue {
-    tags = tagList;
+    tags = window.tagList;
+    // eslint-disable-next-line no-undef
     recordList: RecordItem[] = recordList;
+    // eslint-disable-next-line no-undef
     record: RecordItem = {
       tags: [], notes: '', type: '-', amount: 0
     };
