@@ -17,7 +17,6 @@
   import {Component, Watch} from 'vue-property-decorator';
   // import RecordItem from '@/custom';
   import recordListModel from '@/models/recordListModel';
-  import tagListModel from '@/models/tagListModel';
   import FormItem from '@/components/Money/FormItem.vue';
 
   const recordList = recordListModel.fetch();
