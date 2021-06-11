@@ -3,7 +3,7 @@
     <div class="navBar">
       <Icon class="leftIcon" name="left" @click="goBack"/>
       <span class="title">编辑标签</span>
-      <span class="rightIcon"></span>
+      <span class="rightIcon"/>
     </div>
     <div class="form-wrapper">
       <FormItem :value="tag.name"
@@ -19,7 +19,6 @@
 <script lang="ts">
   import Vue from 'vue';
   import {Component} from 'vue-property-decorator';
-  import tagListModel from '@/models/tagListModel';
   import FormItem from '@/components/Money/FormItem.vue';
   import Button from '@/components/Button.vue';
 
@@ -27,11 +26,13 @@
     components: {FormItem, Button}
   })
   export default class EditLabel extends Vue {
-    // eslint-disable-next-line no-undef
-    tag?:Tag = undefined;
+    get tag(){
+      return this.$store.state.currentTag
+    }
 
     created() {
-      this.tag = window.findTag(this.$route.params.id)
+      const id = this.$route.params.id
+      this.$store.commit('setCurrentTag',id)
       if (!this.tag) {
         this.$router.replace('/404');
       }
@@ -39,17 +40,19 @@
 
     update(name: string) {
       if (this.tag) {
-        window.updateTag(this.tag.id, name);
+        //TODO
       }
     }
 
     remove() {
       if (this.tag) {
-        if (window.removeTag(this.tag.id)) {
-          this.$router.back();
-        }
-      }else {
-        window.alert('删除失败！')
+        //TODO
+        return
+        // if (store.removeTag(this.tag.id)) {
+        //   this.$router.back();
+      //   // }
+      // }else {
+      //   window.alert('删除失败！')
       }
     }
 
