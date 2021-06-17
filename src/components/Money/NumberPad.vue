@@ -2,8 +2,10 @@
   <div class="numberPad">
     <div class="output">
       <div class="notes">
+<!--        <FormItem placeholder="点击输入备注" field-name="备注"-->
+<!--                  :value.sync="record.notes"/>-->
         <FormItem placeholder="点击输入备注" field-name="备注"
-                  :value.sync="record.notes"/>
+                  @update:value="onUpdateNotes"/>
       </div>
       <span class="outputNumber">
          {{output}}
@@ -38,9 +40,15 @@
   export default class NumberPad extends Vue {
     output = '0';
     // eslint-disable-next-line no-undef
-    record: RecordItem = {
-      tags: [], notes: '', type: '-', amount: 0, createdAt: new Date().toISOString()
-    };
+    get record(){
+      return this.$store.state.recordList
+    }
+    created() {
+      this.$store.commit('fetchRecords');
+    }
+    onUpdateNotes(value: string) {
+      this.record.notes = value;
+    }
     inputContent(event: MouseEvent) {
       const button = (event.target as HTMLButtonElement);
       const input = button.textContent!;
@@ -68,8 +76,9 @@
     }
     ok() {
       const number = parseFloat(this.output);
-      this.$emit('update:value', number);
-      this.$emit('submit', number);
+      const newObject = {newAmount:number,newNotes:this.record.notes}
+      this.$emit('update:value', newObject);
+      this.$emit('submit', newObject);
       this.output = '0';
     }
   }

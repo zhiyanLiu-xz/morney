@@ -4,7 +4,7 @@
       <li v-for="tag in incomeTagList" :key="tag.id"
           :class="{selected:selectedTags.indexOf(tag)>=0}"
           @click="toggle(tag)">
-        <Icon v-if="tag.id>12" name="其他"/>
+        <Icon v-if="tag.id>11" name="其他"/>
         <Icon v-else :name="tag.name"/>
         {{tag.name}}
       </li>
@@ -46,7 +46,6 @@
 
 <style lang="scss" scoped>
   .tags {
-    border: 1px solid red;
     max-height: 300px;
     overflow: scroll;
     flex-grow: 1;
@@ -55,7 +54,6 @@
     flex-direction: column;
     box-shadow: 1px 1px 1px #d3d3d3;
     > .current {
-      border: 1px solid green;
       display: flex;
       flex-wrap: wrap;
       > li {

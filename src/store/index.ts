@@ -44,9 +44,25 @@ const store = new Vuex.Store({
       if (index >= 0) {
         state.tagList.splice(index, 1);
         store.commit('saveTags');
-        router.back();
+        window.alert('删除成功！')
       } else {
-        window.alert('删除失败');
+        window.alert('删除失败！');
+      }
+    },
+    removeIncomeTag(state, id: string) {
+      let index = -1;
+      for (let i = 0; i < state.incomeTagList.length; i++) {
+        if (state.incomeTagList[i].id === id) {
+          index = i;
+          break;
+        }
+      }
+      if (index >= 0) {
+        state.incomeTagList.splice(index, 1);
+        store.commit('saveIncomeTags');
+        window.alert('删除成功！')
+      } else {
+        window.alert('删除失败！');
       }
     },
     fetchRecords(state) {
@@ -73,7 +89,6 @@ const store = new Vuex.Store({
         store.commit('createTag','房屋')
         store.commit('createTag','旅行')
         store.commit('createTag','服饰')
-        store.commit('createTag','生活')
         store.commit('createTag','美容')
         store.commit('createTag','运动')
         store.commit('createTag','餐饮')

@@ -28,3 +28,8 @@ type TagListModel = {
   remove: (id: string) => boolean
   save: () => void
 }
+
+type NewInput = {
+  newAmount:number
+  newNotes:string
+}

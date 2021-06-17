@@ -1,6 +1,7 @@
 <template>
   <Layout class-prefix="layout">
-    <NumberPad @update:value="onUpdateAmount" @submit="saveRecord"/>
+    <NumberPad @update:value="onUpdateAmount"
+               @submit="saveRecord"/>
     <div class="createdAt">
       <FormItem field-name="日期"
                 type="date"
@@ -24,6 +25,10 @@
   import recordTypeList from '@/constants/recordTypeList';
   import IncomeTag from '@/components/Money/IncomeTag.vue';
 
+  type NewObject = {
+    newAmount:number,newNotes:string
+  }
+
   @Component({
     components: {IncomeTag, Tabs, Tags,FormItem, NumberPad},
   })
@@ -31,25 +36,19 @@
     get recordList() {
       return this.$store.state.recordList;
     }
-
     recordTypeList = recordTypeList;
     // eslint-disable-next-line no-undef
     record: RecordItem = {
       tags: [], notes: '', type: '-', amount: 0, createdAt: new Date().toISOString()
     };
-
     created() {
       this.$store.commit('fetchRecords');
     }
-
-    onUpdateNotes(value: string) {
-      this.record.notes = value;
+    // eslint-disable-next-line no-undef
+    onUpdateAmount(value:NewInput) {
+      this.record.amount = value.newAmount;
+      this.record.notes = value.newNotes
     }
-
-    onUpdateAmount(value: string) {
-      this.record.amount = parseFloat(value);
-    }
-
     saveRecord() {
       if (!this.record.tags || this.record.tags.length === 0) {
         return window.alert('请至少选择一个标签！');
