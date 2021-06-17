@@ -27,6 +27,7 @@
     @extend %outerShadow;
     display: flex;
     font-size: 12px;
+    background: white;
     > .item {
       padding: 2px 0;
       width: 33.3333%;
@@ -34,18 +35,19 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-
+      color: #ffbcbe;
       .icon {
         width: 32px;
         height: 32px;
-        > .icon.selected{
-          color: $color-highlight;
-        }
       }
     }
 
     > .item.selected {
       color: $color-highlight;
+      ::v-deep .icon{
+        color: $color-highlight;
+      }
+      text-shadow: $color-highlight;
     }
   }
 </style>

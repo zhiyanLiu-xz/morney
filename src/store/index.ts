@@ -12,6 +12,7 @@ const store = new Vuex.Store({
     createRecordError:null,
     createTagError:null,
     tagList: [] as Tag[],
+    incomeTagList: [] as Tag[],
     currentTag: undefined
   } as RootState,
   mutations: {
@@ -64,10 +65,28 @@ const store = new Vuex.Store({
     fetchTags(state) {
       state.tagList = JSON.parse(window.localStorage.getItem('tagList') || '[]');
       if(!state.tagList || state.tagList.length===0){
-        store.commit('createTag','衣')
-        store.commit('createTag','食')
-        store.commit('createTag','住')
-        store.commit('createTag','行')
+        store.commit('createTag','交通')
+        store.commit('createTag','医疗')
+        store.commit('createTag','娱乐')
+        store.commit('createTag','学习')
+        store.commit('createTag','宠物')
+        store.commit('createTag','房屋')
+        store.commit('createTag','旅行')
+        store.commit('createTag','服饰')
+        store.commit('createTag','生活')
+        store.commit('createTag','美容')
+        store.commit('createTag','运动')
+        store.commit('createTag','餐饮')
+      }
+    },
+    fetchIncomeTags(state) {
+      state.incomeTagList = JSON.parse(window.localStorage.getItem('incomeTagList') || '[]');
+      if(!state.incomeTagList || state.incomeTagList.length===0){
+        store.commit('createIncomeTag','工资')
+        store.commit('createIncomeTag','兼职')
+        store.commit('createIncomeTag','礼金')
+        store.commit('createIncomeTag','奖金')
+        store.commit('createIncomeTag','其他')
       }
     },
     createTag(state, name: string) {
@@ -81,8 +100,22 @@ const store = new Vuex.Store({
       state.tagList.push({id, name: name});
       store.commit('saveTags');
     },
+    createIncomeTag(state, name: string) {
+      state.createTagError = null
+      const names = state.incomeTagList.map(item => item.name);
+      if (names.indexOf(name) >= 0) {
+        state.createTagError = new Error('tag name duplicated')
+        return
+      }
+      const id = createId().toString();
+      state.incomeTagList.push({id, name: name});
+      store.commit('saveIncomeTags');
+    },
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList));
+    },
+    saveIncomeTags(state) {
+      window.localStorage.setItem('incomeTagList', JSON.stringify(state.incomeTagList));
     }
   }
 });

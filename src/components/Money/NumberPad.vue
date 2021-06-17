@@ -1,6 +1,14 @@
 <template>
   <div class="numberPad">
-    <div class="output">{{output}}</div>
+    <div class="output">
+      <div class="notes">
+        <FormItem placeholder="点击输入备注" field-name="备注"
+                  :value.sync="record.notes"/>
+      </div>
+      <span class="outputNumber">
+         {{output}}
+      </span>
+    </div>
     <div class="buttons">
       <button @click="inputContent">1</button>
       <button @click="inputContent">2</button>
@@ -22,10 +30,17 @@
 
 <script lang="ts">
   import Vue from 'vue';
-  import {Component, Prop} from 'vue-property-decorator';
-  @Component
+  import {Component,} from 'vue-property-decorator';
+  import FormItem from '@/components/Money/FormItem.vue';
+  @Component({
+    components: {FormItem}
+  })
   export default class NumberPad extends Vue {
     output = '0';
+    // eslint-disable-next-line no-undef
+    record: RecordItem = {
+      tags: [], notes: '', type: '-', amount: 0, createdAt: new Date().toISOString()
+    };
     inputContent(event: MouseEvent) {
       const button = (event.target as HTMLButtonElement);
       const input = button.textContent!;
@@ -62,44 +77,43 @@
 
 <style lang="scss" scoped>
   @import "~@/assets/style/helper.scss";
-
   .numberPad {
     .output {
       @extend %clearFix;
-      @extend %innerShadow;
-      text-align: right;
+      //@extend %innerShadow;
+      background: white;
       font-family: Consolas, monospace;
       font-size: 36px;
-      color: #333333;
-      padding: 9px 16px;
-      height: 72px;
+      color: #ff9ab9;
+      display: flex;
+      justify-content: flex-end;
+      position: relative;
+      >.outputNumber{
+        margin-right: 16px;
+      }
+      >.notes {
+        padding: 17px 0;
+        position: absolute;
+        left: 0;
+      }
     }
-
     .buttons {
       @extend %clearFix;
-
       > button {
+        border: 1px solid #c3c3c3;
+        background: white;
         width: 25%;
-        height: 64px;
+        height: 50px;
         float: left;
-        background: #f0f4f7;
-        border: none;
-
+        /*border: none;*/
         &.ok {
-          height: 64px*2;
+          height: 50px*2;
           float: right;
+          color: white;
+          background: #ff9ab9;
         }
-
         &.zero {
           width: 25%*2;
-        }
-
-        &:nth-child(1) {
-          background: #f2f2f2;
-        }
-
-        &:nth-child(2), &:nth-child(5) {
-          background: #e0e0e0;
         }
       }
     }

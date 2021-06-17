@@ -1,7 +1,7 @@
 <template>
   <div class="tags">
     <ul class="current">
-      <li v-for="tag in tagList" :key="tag.id"
+      <li v-for="tag in incomeTagList" :key="tag.id"
           :class="{selected:selectedTags.indexOf(tag)>=0}"
           @click="toggle(tag)">
         <Icon v-if="tag.id>12" name="其他"/>
@@ -9,7 +9,7 @@
         {{tag.name}}
       </li>
       <li class="new">
-        <button @click="createTag">
+        <button @click="createIncomeTag">
           <Icon name="自定义"/>
           自定义
         </button>
@@ -26,11 +26,11 @@
   @Component
   export default class Tags extends mixins(TagHelper) {
     selectedTags: string[] = [];
-    get tagList(){
-      return this.$store.state.tagList
+    get incomeTagList(){
+      return this.$store.state.incomeTagList
     }
     created() {
-      this.$store.commit('fetchTags');
+      this.$store.commit('fetchIncomeTags');
     }
     toggle(tag:string) {
       const index = this.selectedTags.indexOf(tag);
@@ -46,17 +46,18 @@
 
 <style lang="scss" scoped>
   .tags {
+    border: 1px solid red;
     max-height: 300px;
     overflow: scroll;
     flex-grow: 1;
     background: #fbfaf1;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
     box-shadow: 1px 1px 1px #d3d3d3;
     > .current {
+      border: 1px solid green;
       display: flex;
       flex-wrap: wrap;
-      margin-bottom: 16px;
       > li {
         display: flex;
         flex-direction: column;

@@ -3,6 +3,7 @@ type RootState = {
   createRecordError: Error | null
   createTagError: Error | null
   tagList: Tag[]
+  incomeTagList:Tag[]
   currentTag?: Tag
 }
 

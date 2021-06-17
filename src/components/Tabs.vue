@@ -2,7 +2,9 @@
   <ul class="tabs" :class="{[classPrefix+'-tabs']:classPrefix}">
     <li v-for="item in dataSource" :key="item.value" class="tabs-item"
         :class="liClass(item)" @click="select(item)">
-      {{item.text}}
+      <div class="text">
+        {{item.text}}
+      </div>
     </li>
   </ul>
 </template>
@@ -33,25 +35,30 @@
 
 <style lang="scss" scoped>
   .tabs {
-    background: #C4C4C4;
+    background: #ff9bbb;
     display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    align-items: center;
     text-align: center;
-    font-size: 24px;
     &-item {
-      width: 50%;
-      height: 64px;
+      border: 1px solid white;
+      background: #ff9bbb;
+      border-radius: 4px;
+      font-size: 14px;
+      padding: 3px 35px;
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
-      &.selected::after {
-        content: '';
-        position: absolute;
+      text-wrap: none;
+      color: white;
+      &.selected {
+        z-index: 0;
         bottom: 0;
         left: 0;
-        width: 100%;
-        height: 4px;
-        background: #333;
+        background: white;
+        color: #ff9bbb;
       }
     }
   }

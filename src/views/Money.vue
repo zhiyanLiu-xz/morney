@@ -1,19 +1,16 @@
 <template>
   <Layout class-prefix="layout">
     <NumberPad @update:value="onUpdateAmount" @submit="saveRecord"/>
-    <Tabs :data-source="recordTypeList"
-          :value.sync="record.type"/>
     <div class="createdAt">
       <FormItem field-name="日期"
                 type="date"
                 placeholder="在这里输入日期"
                 :value.sync="record.createdAt"/>
     </div>
-    <div class="notes">
-      <FormItem placeholder="点击输入备注" field-name="备注"
-                :value.sync="record.notes"/>
-    </div>
-    <Tags @update:value="record.tags=$event"/>
+    <Tags v-if="record.type === '-'" @update:value="record.tags=$event"/>
+    <IncomeTag v-if="record.type === '+'" @update:value="record.tags=$event"/>
+    <Tabs :data-source="recordTypeList"
+          :value.sync="record.type"/>
   </Layout>
 </template>
 
@@ -25,9 +22,10 @@
   import FormItem from '@/components/Money/FormItem.vue';
   import Tabs from '@/components/Tabs.vue';
   import recordTypeList from '@/constants/recordTypeList';
+  import IncomeTag from '@/components/Money/IncomeTag.vue';
 
   @Component({
-    components: {Tabs, FormItem, Tags, NumberPad},
+    components: {IncomeTag, Tabs, Tags,FormItem, NumberPad},
   })
   export default class Money extends Vue {
     get recordList() {
@@ -37,7 +35,7 @@
     recordTypeList = recordTypeList;
     // eslint-disable-next-line no-undef
     record: RecordItem = {
-      tags: [], notes: '', type: '-', amount: 0,createdAt:new Date().toISOString()
+      tags: [], notes: '', type: '-', amount: 0, createdAt: new Date().toISOString()
     };
 
     created() {
@@ -53,13 +51,13 @@
     }
 
     saveRecord() {
-      if(!this.record.tags || this.record.tags.length === 0){
-        return window.alert('请至少选择一个标签！')
+      if (!this.record.tags || this.record.tags.length === 0) {
+        return window.alert('请至少选择一个标签！');
       }
       this.$store.commit('createRecord', this.record);
       if (this.$store.state.createRecordError === null) {
         window.alert('已保存');
-        this.record.notes = ''
+        this.record.notes = '';
       }
     }
   }
@@ -70,8 +68,19 @@
     display: flex;
     flex-direction: column-reverse;
   }
-
-  .notes {
-    padding: 12px 0
+  .createdAt {
+    background: white;
+    box-shadow: 1px 2px 1px #d3d3d3;
+    ::v-deep .formItem{
+      margin: 8px 0;
+      > .name{
+        margin: 0 16px;
+      }
+      > input{
+        margin-right: 32px;
+        padding: 5px 5px 0 16px;
+        border: 1px solid #e8e8e9;
+      }
+    }
   }
 </style>

@@ -3,7 +3,7 @@
     <div class="tags">
       <router-link class="tag" v-for="tag in tags" :key="tag.id"
       :to="`/labels/edit/${tag.id}`">
-        <span>{{tag.name}}</span>
+        <span class="tagName">{{tag.name}}</span>
         <Icon name="right"/>
       </router-link>
     </div>
@@ -45,11 +45,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-
+      ::v-deep .icon{
+        color: #ff9ab7;
+      }
       svg {
         width: 18px;
         height: 18px;
-        color: #666666;
         margin-right: 16px;
       }
     }

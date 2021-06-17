@@ -39,19 +39,18 @@
 </script>
 
 <style lang="scss" scoped>
-  .formItem{
-    display: flex;
+  .formItem {
+    font-size: 14px;
     padding-left: 16px;
+    display: flex;
     align-items: center;
-    > .name{
+    .name {
       padding-right: 16px;
     }
-    > input{
-      height: 40px;
+    input {
+      flex-grow: 1;
       background: transparent;
       border: none;
-      font-size: 14px;
-      color: #999;
     }
   }
 </style>
