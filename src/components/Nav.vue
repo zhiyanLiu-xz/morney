@@ -27,7 +27,6 @@
     @extend %outerShadow;
     display: flex;
     font-size: 12px;
-
     > .item {
       padding: 2px 0;
       width: 33.3333%;
@@ -39,6 +38,9 @@
       .icon {
         width: 32px;
         height: 32px;
+        > .icon.selected{
+          color: $color-highlight;
+        }
       }
     }
 

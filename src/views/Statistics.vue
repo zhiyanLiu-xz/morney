@@ -2,6 +2,9 @@
   <Layout>
     <Tabs class-prefix="type" :data-source="recordTypeList"
           :value.sync="type"/>
+    <div class="chart-wrapper" ref="chartWrapper">
+      <Chart class="chart" :options="chartOptions"/>
+    </div>
     <ol v-if="groupedList.length>0">
       <li v-for="(group,index) in groupedList" :key="index">
         <h3 class="title">{{group.title}}</h3>
@@ -27,14 +30,21 @@
   import recordTypeList from '@/constants/recordTypeList';
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
+  import Chart from '@/components/Chart.vue';
+  import _ from 'lodash';
 
   @Component({
-    components:{Tabs}
+    components:{Chart, Tabs}
   })
   export default class Statistics extends Vue{
     // eslint-disable-next-line no-undef
     tagString(tags:Tag[]){
       return tags.length === 0 ? '无':tags.map(t=>t.name).join('，')
+    }
+
+    mounted(){
+      const div = (this.$refs.chartWrapper as HTMLDivElement)
+      div.scrollLeft = div.scrollWidth
     }
     beautify(string:string){
       const day = dayjs(string)
@@ -51,6 +61,68 @@
         return day.format('YYYY年M月D日')
       }
     }
+    get keyValueList(){
+      const today = new Date()
+      const array = []
+      for(let i = 0;i<=29;i++){
+        const dateString = dayjs(today)
+          .subtract(i,'day').format('YYYY-MM-DD')
+        const found = _.find(this.groupedList,{
+          title:dateString
+        })
+        array.push({
+          key:dateString,value:found?found.total:0
+        })
+      }
+      array.sort((a,b)=>{
+        if(a.key>b.key){
+          return 1
+        }else if(a.key===b.key){
+          return 0
+        }else {
+          return -1
+        }
+      })
+      return array
+    }
+    get chartOptions(){
+      const keys = this.keyValueList.map(item=>item.key)
+      const values = this.keyValueList.map(item=>item.value)
+      return {
+        grid:{
+          left:0,
+          right:0,
+        },
+        xAxis:{
+          type:'category',
+          data:keys,
+          axisTick:{alignWithLabel:true},
+          axisLine:{lineStyle:{color:'#666'}},
+          axisLabel:{
+            formatter: function (value:string,index:number) {
+              return value.substr(5)
+            }
+          }
+        },
+        yAxis:{
+          type:'value',
+          show:false
+        },
+        series:[{
+          symbol:'circle',
+          symbolSize:12,
+          itemStyle:{borderWidth:1,color:'#666',borderColor:'#666'},
+          data:values,
+          type:'line'
+        }],
+        tooltip:{
+          show:true,triggerOn:'click',
+          position:'top',
+          formatter:'{c}'
+        }
+      }
+    }
+
 
     get recordList(){
       // eslint-disable-next-line no-undef
@@ -92,6 +164,10 @@
 </script>
 
 <style scoped lang="scss">
+  .echarts{
+    max-width: 100%;
+    height: 400px;
+  }
   .noResult{
     padding: 16px;
     text-align: center;
@@ -127,6 +203,15 @@
     }
     .interval-tabs-item {
       height: 48px;
+    }
+  }
+  .chart{
+    width: 430%;
+    &-wrapper{
+      overflow: auto;
+      &::-webkit-scrollbar{
+        display: none;
+      }
     }
   }
 </style>

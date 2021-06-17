@@ -16,6 +16,7 @@
 
 <style lang="scss" scoped>
   .icon {
+    color: #ff8a8e;
     width: 1em; height: 1em;
     vertical-align: -0.15em;
     fill: currentColor;
