@@ -1,7 +1,13 @@
 <template>
   <Layout class="wrapper">
-    <Tabs class-prefix="type" :data-source="recordTypeList"
-          :value.sync="type"/>
+    <div class="inputWrapper">
+      <label>
+        <input type="month" :value="x(recordAt)"
+               @input="onValueChanged($event.target.value)"/>
+      </label>
+    </div>
+    <AmountTabs class-prefix="type" :data-source="recordTypeList"
+                :value.sync="type"/>
     <div class="chart-wrapper" ref="chartWrapper">
       <Chart class="chart" :options="chartOptions"/>
     </div>
@@ -32,28 +38,40 @@
   import Tabs from '@/components/Tabs.vue';
   import {Component} from 'vue-property-decorator';
   import recordTypeList from '@/constants/recordTypeList';
+  import newRecordTypeList from '@/constants/newRecordTypeList';
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
   import Chart from '@/components/Chart.vue';
   import _ from 'lodash';
+  import AmountTabs from '@/components/AmountTabs.vue';
 
   @Component({
-    components: {Chart, Tabs}
+    components: {AmountTabs, Chart, Tabs}
   })
   export default class Statistics extends Vue {
+    recordAt = new Date().toISOString()
     amount = 0;
-
+    type = '-';
+    recordTypeList = recordTypeList;
+    newRecordTypeList = newRecordTypeList
+    beforeCreate() {
+      this.$store.commit('fetchRecords');
+    }
+    x(isoString:string){
+      return dayjs(isoString).format('YYYY-MM')
+    }
+    onValueChanged(value:string){
+      this.recordAt = value
+    }
     // eslint-disable-next-line no-undef
     tagString(tags: Tag[]) {
       return tags.length === 0 ? '无' : tags.map(t => t.name).join('，');
     }
-
     mounted() {
       const div = (this.$refs.chartWrapper as HTMLDivElement);
       div.scrollLeft = div.scrollWidth;
       this.add();
     }
-
     add() {
       for (let i = 0; i < this.groupedList.length; i++) {
         const number1 = this.groupedList[i].total as number;
@@ -150,8 +168,10 @@
 
     get groupedList() {
       const {recordList} = this;
+      const newRecordAt = dayjs(this.recordAt).format('YYYY-MM')
       const newList = clone(recordList)
         .filter(r => r.type === this.type)
+        .filter(r=>dayjs(r.createdAt).format('YYYY-MM')===newRecordAt)
         .sort((a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf());
       if (newList.length === 0) {return [];}
       // eslint-disable-next-line no-undef
@@ -173,22 +193,29 @@
       });
       return result;
     }
-
-    beforeCreate() {
-      this.$store.commit('fetchRecords');
-    }
-
-    type = '-';
-    recordTypeList = recordTypeList;
   }
 </script>
 
 <style scoped lang="scss">
+  .inputWrapper{
+    width: 100%;
+    background: #ff9bbb;
+    height: 48px;
+    position: relative;
+    > label > input{
+      border: none;
+      color: white;
+      background: inherit;
+      position: absolute;
+      left: 50%;
+      margin-left: -80px;
+      bottom: 8px;
+    }
+  }
   .noResult {
     padding: 16px;
     text-align: center;
   }
-
   %item {
     padding: 8px 16px;
     line-height: 24px;
@@ -200,12 +227,10 @@
   .wrapper {
     background: #fafaf8;
   }
-
   .itemList {
     margin-top: 12px;
     max-height: 282px;
     overflow: scroll;
-
     .title {
       @extend %item;
       font-size: 12px;
@@ -250,10 +275,8 @@
     background: white;
     width: 430%;
     max-height: 250px;
-
     &-wrapper {
       overflow: auto;
-
       &::-webkit-scrollbar {
         display: none;
       }

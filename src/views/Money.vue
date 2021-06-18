@@ -24,13 +24,14 @@
   import Tabs from '@/components/Tabs.vue';
   import recordTypeList from '@/constants/recordTypeList';
   import IncomeTag from '@/components/Money/IncomeTag.vue';
+  import {Button, Cell, Toast} from 'vant';
 
   type NewObject = {
     newAmount:number,newNotes:string
   }
 
   @Component({
-    components: {IncomeTag, Tabs, Tags,FormItem, NumberPad},
+    components: {IncomeTag, Tabs, Tags,FormItem, NumberPad,Button,Cell},
   })
   export default class Money extends Vue {
     get recordList() {
@@ -51,11 +52,13 @@
     }
     saveRecord() {
       if (!this.record.tags || this.record.tags.length === 0) {
-        return window.alert('请至少选择一个标签！');
+        // window.alert('添加成功！')
+        Toast.success('添加成功！')
+        return Toast('请至少选择一个标签！');
       }
       this.$store.commit('createRecord', this.record);
       if (this.$store.state.createRecordError === null) {
-        window.alert('已保存');
+        Toast.success('添加成功！')
         this.record.notes = '';
       }
     }

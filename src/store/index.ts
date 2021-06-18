@@ -2,9 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import clone from '@/lib/clone';
 import createId from '@/lib/createId';
-import router from '@/router';
+import {Toast} from 'vant';
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 const store = new Vuex.Store({
   state: {
@@ -25,7 +25,8 @@ const store = new Vuex.Store({
       if (idList.indexOf(id) >= 0) {
         const names = state.tagList.map(item => item.name);
         if (names.indexOf(name) >= 0) {
-          window.alert('标签名重复了');
+          // window.alert('标签名重复了');
+          Toast('标签名重复！')
         } else {
           const tag = state.tagList.filter(item => item.id === id)[0];
           tag.name = name;
@@ -44,9 +45,11 @@ const store = new Vuex.Store({
       if (index >= 0) {
         state.tagList.splice(index, 1);
         store.commit('saveTags');
-        window.alert('删除成功！')
+        // window.alert('删除成功！')
+        Toast.success('删除成功！')
       } else {
-        window.alert('删除失败！');
+        // window.alert('删除失败！');
+        Toast.fail('删除失败！')
       }
     },
     removeIncomeTag(state, id: string) {
@@ -60,9 +63,9 @@ const store = new Vuex.Store({
       if (index >= 0) {
         state.incomeTagList.splice(index, 1);
         store.commit('saveIncomeTags');
-        window.alert('删除成功！')
+        Toast.success('删除成功！')
       } else {
-        window.alert('删除失败！');
+        Toast.fail('删除失败！')
       }
     },
     fetchRecords(state) {

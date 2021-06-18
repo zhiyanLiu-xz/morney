@@ -6,6 +6,10 @@ import Nav from '@/components/Nav.vue';
 import Layout from '@/components/Layout.vue';
 import Icon from '@/components/Icon.vue';
 import store from '@/store/index'
+import 'vant/lib/index.css'
+import { Toast } from 'vant';
+
+Vue.use(Toast);
 
 Vue.config.productionTip = false
 
@@ -18,6 +22,7 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
 
 window.onload = function () {
   setTimeout(function () {
