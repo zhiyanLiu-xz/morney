@@ -11,6 +11,7 @@
   @Component
   export default class Chart extends Vue {
     @Prop() options?:EChartsOption
+    @Prop() time?:string
     chart?:ECharts;
     mounted(){
       if(this.options === undefined){

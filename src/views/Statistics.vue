@@ -2,21 +2,22 @@
   <Layout class="wrapper">
     <div class="inputWrapper">
       <label>
-        <input type="month" :value="x(recordAt)"
+        <input type="date" :value="x(recordAt)"
                @input="onValueChanged($event.target.value)"/>
       </label>
     </div>
     <AmountTabs class-prefix="type" :data-source="recordTypeList"
+                :date-time="recordAt"
                 :value.sync="type"/>
     <div class="chart-wrapper" ref="chartWrapper">
-      <Chart class="chart" :options="chartOptions"/>
+      <Chart class="chart" :options="chartOptions" :time="recordAt"/>
     </div>
     <ol v-if="groupedList.length>0" class="itemList">
       <li v-for="(group,index) in groupedList" :key="index">
         <ol class="title">
           <li>{{group.title}}</li>
-          <li v-if="type==='-'">支出：{{amount}}</li>
-          <li v-else>收入：{{amount}}</li>
+          <li v-if="type==='-'">支出：{{group.total}}</li>
+          <li v-else>收入：{{group.total}}</li>
         </ol>
         <ol>
           <li v-for="item in group.items" :key="item.id" class="record">
@@ -38,7 +39,6 @@
   import Tabs from '@/components/Tabs.vue';
   import {Component} from 'vue-property-decorator';
   import recordTypeList from '@/constants/recordTypeList';
-  import newRecordTypeList from '@/constants/newRecordTypeList';
   import dayjs from 'dayjs';
   import clone from '@/lib/clone';
   import Chart from '@/components/Chart.vue';
@@ -53,12 +53,11 @@
     amount = 0;
     type = '-';
     recordTypeList = recordTypeList;
-    newRecordTypeList = newRecordTypeList
     beforeCreate() {
       this.$store.commit('fetchRecords');
     }
     x(isoString:string){
-      return dayjs(isoString).format('YYYY-MM')
+      return dayjs(isoString).format('YYYY-MM-DD')
     }
     onValueChanged(value:string){
       this.recordAt = value
@@ -98,16 +97,32 @@
 
     get keyValueList() {
       const today = new Date();
+      const day = this.recordAt
       const array = [];
-      for (let i = 0; i <= 29; i++) {
-        const dateString = dayjs(today)
-          .subtract(i, 'day').format('YYYY-MM-DD');
-        const found = _.find(this.groupedList, {
-          title: dateString
-        });
-        array.push({
-          key: dateString, value: found ? found.total : 0
-        });
+      if (dayjs(today).format('YYYY-MM')===dayjs(day).format('YYYY-MM')){
+        for (let i = 0; i <= 29; i++) {
+          const dateString = dayjs(today)
+            .subtract(i, 'day').format('YYYY-MM-DD');
+          const found = _.find(this.groupedList, {
+            title: dateString
+          });
+          array.push({
+            key: dateString, value: found ? found.total : 0
+          });
+          console.log('array');
+          console.log(array);
+        }
+      }else {
+        for (let i = 0; i <= 29; i++) {
+          const dateString = dayjs(day)
+            .subtract(i, 'day').format('YYYY-MM-DD');
+          const found = _.find(this.groupedList, {
+            title: dateString
+          });
+          array.push({
+            key: dateString, value: found ? found.total : 0
+          });
+        }
       }
       array.sort((a, b) => {
         if (a.key > b.key) {
@@ -223,7 +238,6 @@
     justify-content: space-between;
     align-items: center;
   }
-
   .wrapper {
     background: #fafaf8;
   }
@@ -231,6 +245,9 @@
     margin-top: 12px;
     max-height: 282px;
     overflow: scroll;
+    &::-webkit-scrollbar{
+      display: none;
+    }
     .title {
       @extend %item;
       font-size: 12px;
@@ -238,16 +255,13 @@
       height: 26px;
       color: #818584;
     }
-
     .record {
       background: white;
       @extend %item;
-
       > .itemAmount {
         color: #ff9bbb;
       }
     }
-
     .notes {
       margin-right: auto;
       margin-left: 16px;

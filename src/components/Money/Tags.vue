@@ -78,7 +78,7 @@
         margin-top: 16px;
         padding: 0 16px;
         font-size: 14px;
-        border-radius: (49px/2);
+        border-radius: 24px;
         > .text{
           width: 38px;
           max-height: 24px;

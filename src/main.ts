@@ -32,11 +32,15 @@ window.onload = function () {
 
 if(document.documentElement.clientWidth > 500){
   const img = document.createElement('img')
-  img.src = '@/public/qrcode.png'
+  img.src = './qrcode.png'
   img.style.position = 'fixed'
   img.style.left = '50%'
   img.style.top = '50%'
   img.style.transform = 'translate(-50%,-50%)'
   img.style.boxShadow = '0 0 10px rgba(0,0,0,0.25)'
+  img.style.width = '250px'
+  img.onclick = function(){
+    img.style.display = 'none'
+  }
   document.body.appendChild(img)
 }
